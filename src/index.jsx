@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory, Link, IndexRoute } from 'react-router'
 
 const App = React.createClass({
@@ -44,4 +44,4 @@ ReactDOM.render(
     </Route>
   </Router>,
   document.querySelector('#app')
-);
+)

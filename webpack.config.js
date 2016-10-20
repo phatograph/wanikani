@@ -12,6 +12,13 @@ module.exports = {
     filename: 'bundle.js',
   },
   module: {
+    preLoaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        loaders: ['eslint'],
+      }
+    ],
     loaders: [
       {
         test: /\.jsx?$/,
@@ -27,6 +34,9 @@ module.exports = {
         loader: "style!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!sass-loader!postcss-loader"
       }
     ],
+  },
+  eslint: {
+    configFile: `./.eslintrc`
   },
   // postcss: function () {
   //   return [autoprefixer];
