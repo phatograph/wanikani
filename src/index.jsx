@@ -17,11 +17,17 @@ const App = React.createClass({
   }
 })
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-)
+const Home = React.createClass({
+  componentDidMount() {
+  },
+  render() {
+    return (
+      <div>
+        <h2>Home</h2>
+      </div>
+    )
+  }
+})
 
 const About = () => (
   <div>
