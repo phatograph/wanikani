@@ -2,14 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, Link, IndexRoute } from 'react-router'
 import { Provider } from 'react-redux'
-import { createStore, combineReducers } from 'redux'
+import { createStore } from 'redux'
+import Immutable from 'immutable'
+import { combineReducers } from 'redux-immutable'
+
 import { userInfo, UserInfoContainer } from './containers/UserInfoContainer.js'
 import { kanjiList, HomeContainer } from './containers/HomeContainer.js'
 
+const initialState = Immutable.Map()
 const store = createStore(combineReducers({
   userInfo,
   kanjiList
-}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+}),
+initialState,
+window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 const App = React.createClass({
   render() {

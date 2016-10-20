@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import fetchJsonp from 'fetch-jsonp'
+import Immutable from 'immutable'
 
 const Home = React.createClass({
   componentDidMount() {
@@ -9,7 +10,7 @@ const Home = React.createClass({
   render() {
     return (
       <div>
-        <h2>{this.props.kanjiList.name}</h2>
+        <h2>{this.props.kanjiList.get('name')}</h2>
       </div>
     )
   }
@@ -29,7 +30,7 @@ const fetchKanjiListSuccess = (kanjiList) => {
   }
 }
 
-export const kanjiList = (state = {}, action) => {
+export const kanjiList = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_KANJI_LIST':
       fetch('http://localhost:4001/')
@@ -37,7 +38,7 @@ export const kanjiList = (state = {}, action) => {
       .then(json => action.dispatch(fetchKanjiListSuccess(json)))
       return state
     case 'FETCH_KANJI_LIST_SUCCESS':
-      return action.kanjiList
+      return Immutable.fromJS(action.kanjiList)
     default:
       return state
   }
@@ -45,7 +46,7 @@ export const kanjiList = (state = {}, action) => {
 
 const mapStateToProps = (state) => {
   return {
-    kanjiList: state.kanjiList
+    kanjiList: state.get('kanjiList')
   }
 }
 
