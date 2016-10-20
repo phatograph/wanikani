@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router, Route, hashHistory, Link, IndexRoute } from 'react-router'
+import { Router, Route, browserHistory, Link, IndexRoute } from 'react-router'
 
 const App = React.createClass({
   render() {
@@ -37,7 +37,7 @@ const NoMatch = ({ location }) => (
 )
 
 ReactDOM.render(
-  <Router history={hashHistory}>
+  <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
       <Route path="/about" component={About}/>
