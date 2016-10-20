@@ -4,12 +4,16 @@
   "description": "wanikani",
   "main": "index.js",
   "scripts": {
+    "dev": "webpack-dev-server --inline",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Pat Wangrungarun",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2"
   }
