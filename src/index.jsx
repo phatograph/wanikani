@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, Link, IndexRoute } from 'react-router'
 import { Provider } from 'react-redux'
 import { createStore, combineReducers } from 'redux'
+import { UserInfoContainer } from './containers/UserInfoContainer.js'
 import { kanjiList, HomeContainer } from './containers/HomeContainer.js'
 
 const store = createStore(combineReducers({ kanjiList }))
@@ -11,6 +12,7 @@ const App = React.createClass({
   render() {
     return (
       <div>
+        <UserInfoContainer />
         <h1>React Router Tutorial</h1>
         <ul role="nav">
           <li><Link to="/">Home</Link></li>
