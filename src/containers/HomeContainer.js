@@ -15,14 +15,14 @@ const Home = React.createClass({
   }
 })
 
-const fetchUserInfo = (dispatch) => {
+const fetchKanjiList = (dispatch) => {
   return {
     type: 'FETCH_USER_INFO',
     dispatch
   }
 }
 
-const fetchUserInfoSuccess = (kanjiList) => {
+const fetchKanjiListSuccess = (kanjiList) => {
   return {
     type: 'FETCH_USER_INFO_SUCCESS',
     kanjiList
@@ -34,7 +34,7 @@ export const kanjiList = (state = {}, action) => {
     case 'FETCH_USER_INFO':
       fetch('http://localhost:4001/')
       .then(response => response.json())
-      .then(json => action.dispatch(fetchUserInfoSuccess(json)))
+      .then(json => action.dispatch(fetchKanjiListSuccess(json)))
       return state
     case 'FETCH_USER_INFO_SUCCESS':
       return action.kanjiList
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoad: () => dispatch(fetchUserInfo(dispatch))
+    onLoad: () => dispatch(fetchKanjiList(dispatch))
   }
 }
 
