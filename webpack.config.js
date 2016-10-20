@@ -7,7 +7,7 @@ module.exports = {
     path.resolve(__dirname, 'src/index.jsx')
   ],
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'public'),
     filename: 'bundle.js',
   },
   module: {
@@ -35,6 +35,6 @@ module.exports = {
     progress: true,
     historyApiFallback: true,
     port: 4000,
-    contentBase: 'build'
+    contentBase: path.resolve(__dirname, 'public')
   }
 };
