@@ -9,7 +9,7 @@ const Home = React.createClass({
   render() {
     return (
       <div>
-        <h2>{this.props.userInfo.name}</h2>
+        <h2>{this.props.kanjiList.name}</h2>
       </div>
     )
   }
@@ -22,14 +22,14 @@ const fetchUserInfo = (dispatch) => {
   }
 }
 
-const fetchUserInfoSuccess = (userInfo) => {
+const fetchUserInfoSuccess = (kanjiList) => {
   return {
     type: 'FETCH_USER_INFO_SUCCESS',
-    userInfo
+    kanjiList
   }
 }
 
-export const userInfo = (state = {}, action) => {
+export const kanjiList = (state = {}, action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
       fetch('http://localhost:4001/')
@@ -37,7 +37,7 @@ export const userInfo = (state = {}, action) => {
       .then(json => action.dispatch(fetchUserInfoSuccess(json)))
       return state
     case 'FETCH_USER_INFO_SUCCESS':
-      return action.userInfo
+      return action.kanjiList
     default:
       return state
   }
@@ -45,7 +45,7 @@ export const userInfo = (state = {}, action) => {
 
 const mapStateToProps = (state) => {
   return {
-    userInfo: state.userInfo
+    kanjiList: state.kanjiList
   }
 }
 
