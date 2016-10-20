@@ -9,7 +9,7 @@ import { kanjiList, HomeContainer } from './containers/HomeContainer.js'
 const store = createStore(combineReducers({
   userInfo,
   kanjiList
-}))
+}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 const App = React.createClass({
   render() {

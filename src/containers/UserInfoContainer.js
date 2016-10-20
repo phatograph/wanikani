@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import fetchJsonp from 'fetch-jsonp'
 
 const UserInfo = React.createClass({
   componentDidMount() {
@@ -8,7 +9,7 @@ const UserInfo = React.createClass({
   render() {
     return (
       <div>
-        UserInfo {this.props.userInfo.name}
+        UserInfo {this.props.userInfo.user_information ? this.props.userInfo.user_information.username : 'loading'}
       </div>
     )
   }
@@ -31,7 +32,7 @@ const fetchUserInfoSuccess = (userInfo) => {
 export const userInfo = (state = {}, action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
-      fetch('http://localhost:4001/user-info')
+      fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information')
       .then(response => response.json())
       .then(json => action.dispatch(fetchUserInfoSuccess(json)))
       return state
