@@ -1,6 +1,19 @@
+import React from 'react'
 import { connect } from 'react-redux'
-import Home from './Home.jsx'
 import fetchJsonp from 'fetch-jsonp'
+
+const Home = React.createClass({
+  componentDidMount() {
+    this.props.onLoad()
+  },
+  render() {
+    return (
+      <div>
+        <h2>{this.props.userInfo.name}</h2>
+      </div>
+    )
+  }
+})
 
 const fetchUserInfo = (dispatch) => {
   return {
