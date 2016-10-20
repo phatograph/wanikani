@@ -1,7 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, Link, IndexRoute } from 'react-router'
-import Home from './containers/Home.jsx'
+import { Provider } from 'react-redux'
+import { createStore, combineReducers } from 'redux'
+import { userInfo, HomeContainer } from './containers/HomeContainer.js'
+
+const store = createStore(combineReducers({ userInfo }))
 
 const App = React.createClass({
   render() {
@@ -32,11 +36,13 @@ const NoMatch = ({ location }) => (
 )
 
 ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
-      <Route path="/about" component={About}/>
-    </Route>
-  </Router>,
+  <Provider store={store}>
+    <Router history={browserHistory}>
+      <Route path="/" component={App}>
+        <IndexRoute component={HomeContainer}/>
+        <Route path="/about" component={About}/>
+      </Route>
+    </Router>
+  </Provider>,
   document.querySelector('#app')
 )
