@@ -1,16 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, hashHistory, Link } from 'react-router'
+import { Router, Route, hashHistory, Link, IndexRoute } from 'react-router'
 
-const App = () => (
-  <div>
-    <h1>Wanikani</h1>
-    <ul role="nav">
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/about">About</Link></li>
-    </ul>
-  </div>
-)
+const App = React.createClass({
+  render() {
+    return (
+      <div>
+        <h1>React Router Tutorial</h1>
+        <ul role="nav">
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+        </ul>
+        {this.props.children}
+      </div>
+    )
+  }
+})
 
 const Home = () => (
   <div>
@@ -33,8 +38,10 @@ const NoMatch = ({ location }) => (
 
 ReactDOM.render(
   <Router history={hashHistory}>
-    <Route path="/" component={App}/>
-    <Route path="/about" component={About}/>
+    <Route path="/" component={App}>
+      <IndexRoute component={Home}/>
+      <Route path="/about" component={About}/>
+    </Route>
   </Router>,
   document.querySelector('#app')
 );
