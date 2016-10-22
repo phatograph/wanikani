@@ -6,8 +6,10 @@ import { createStore } from 'redux'
 import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
-import { userInfo, UserInfoContainer } from './containers/UserInfoContainer.js'
-import { kanjiList, HomeContainer } from './containers/HomeContainer.js'
+import { userInfo, UserInfoContainer } from './containers/UserInfoContainer'
+import { kanjiList, HomeContainer } from './containers/HomeContainer'
+
+import style from './../assets/css/style.css'
 
 const initialState = Immutable.Map()
 const store = createStore(combineReducers({

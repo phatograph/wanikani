@@ -5,7 +5,7 @@ var BUILD_DIR = path.resolve(__dirname, 'public');
 
 module.exports = {
   entry: [
-    path.resolve(__dirname, 'src/index.jsx')
+    path.resolve(__dirname, 'src/index.js')
   ],
   output: {
     path: BUILD_DIR,
@@ -38,9 +38,9 @@ module.exports = {
   eslint: {
     configFile: `./.eslintrc`
   },
-  // postcss: function () {
-  //   return [autoprefixer];
-  // },
+  postcss: function () {
+    return [];
+  },
   devServer: {
     colors: true,
     progress: true,
