@@ -42,6 +42,13 @@ const fetchUserInfo = (dispatch) => {
 }
 
 const fetchUserInfoSuccess = (userInfo) => {
+  userInfo.requested_information = userInfo.requested_information.sort((a, b) => {
+    if (!a.user_specific) a.user_specific = { srs_numeric: 0 }
+    if (!b.user_specific) b.user_specific = { srs_numeric: 0 }
+
+    return a.user_specific.srs_numeric - b.user_specific.srs_numeric
+  })
+
   return {
     type: 'FETCH_USER_INFO_SUCCESS',
     userInfo
@@ -51,19 +58,19 @@ const fetchUserInfoSuccess = (userInfo) => {
 export const userInfo = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
-      fetch('http://localhost:4000/state.json')
-      .then(res => res.json())
-      .then(kanji => { action.dispatch(fetchUserInfoSuccess(kanji.computedStates[2].state.userInfo)) })
-
-      // fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information')
-      // .then(response => response.json())
-      // .then(userInfo => {
-      //   fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${userInfo.user_information.level}`)
-      //   .then(response => response.json())
-      //   .then(kanji => {
-      //     action.dispatch(fetchUserInfoSuccess(kanji))
-      //   })
+      // fetch('http://localhost:4000/state.json')
+      // .then(res => res.json())
+      // .then(kanji => {
+      //   action.dispatch(fetchUserInfoSuccess(kanji.computedStates[2].state.userInfo))
       // })
+
+      fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information')
+        .then(response => response.json())
+        .then(userInfo => {
+          fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/2`)
+            .then(response => response.json())
+            .then(kanji => action.dispatch(fetchUserInfoSuccess(kanji)))
+      })
       return state
     case 'FETCH_USER_INFO_SUCCESS':
       return Immutable.fromJS(action.userInfo)
