@@ -41,8 +41,23 @@ const fetchUserInfo = (dispatch) => {
   }
 }
 
+const fetchKanji = ({ userInfo, dispatch }) => {
+  return {
+    type: 'FETCH_KANJI',
+    userInfo,
+    dispatch
+  }
+}
+
 const fetchUserInfoSuccess = (userInfo) => {
-  userInfo.requested_information = userInfo.requested_information.sort((a, b) => {
+  return {
+    type: 'FETCH_USER_INFO_SUCCESS',
+    userInfo
+  }
+}
+
+const fetchKanjiSuccess = (kanjis) => {
+  kanjis.requested_information = kanjis.requested_information.sort((a, b) => {
     if (!a.user_specific) a.user_specific = { srs_numeric: 0 }
     if (!b.user_specific) b.user_specific = { srs_numeric: 0 }
 
@@ -50,30 +65,27 @@ const fetchUserInfoSuccess = (userInfo) => {
   })
 
   return {
-    type: 'FETCH_USER_INFO_SUCCESS',
-    userInfo
+    type: 'FETCH_KANJI_SUCCESS',
+    kanjis
   }
 }
 
 export const userInfo = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
-      // fetch('http://localhost:4000/state.json')
-      // .then(res => res.json())
-      // .then(kanji => {
-      //   action.dispatch(fetchUserInfoSuccess(kanji.computedStates[2].state.userInfo))
-      // })
-
-      fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information')
+      fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information', { timeout: 10000 })
         .then(response => response.json())
-        .then(userInfo => {
-          fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/2`)
-            .then(response => response.json())
-            .then(kanji => action.dispatch(fetchUserInfoSuccess(kanji)))
-      })
+        .then(userInfo => action.dispatch(fetchKanji({ userInfo, dispatch: action.dispatch })))
+      return state
+    case 'FETCH_KANJI':
+      fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/2`, { timeout: 10000 })
+        .then(response => response.json())
+        .then(kanji => action.dispatch(fetchKanjiSuccess(kanji)))
       return state
     case 'FETCH_USER_INFO_SUCCESS':
       return Immutable.fromJS(action.userInfo)
+    case 'FETCH_KANJI_SUCCESS':
+      return Immutable.fromJS(action.kanjis)
     default:
       return state
   }
