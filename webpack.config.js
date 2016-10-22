@@ -1,7 +1,6 @@
-// var autoprefixer      = require('autoprefixer');
-// var precss            = require('precss');
-var path      = require('path');
-var BUILD_DIR = path.resolve(__dirname, 'public');
+var autoprefixer = require('autoprefixer');
+var path         = require('path');
+var BUILD_DIR    = path.resolve(__dirname, 'public');
 
 module.exports = {
   entry: [
@@ -39,7 +38,7 @@ module.exports = {
     configFile: `./.eslintrc`
   },
   postcss: function () {
-    return [];
+    return [autoprefixer];
   },
   devServer: {
     colors: true,
