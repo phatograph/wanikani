@@ -21,12 +21,11 @@ const App = React.createClass({
   render() {
     return (
       <div>
-        <UserInfoContainer />
-        <h1>React Router Tutorial</h1>
-        <ul role="nav">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-        </ul>
+        {/* <h1>React Router Tutorial</h1> */}
+        {/* <ul role="nav"> */}
+        {/*   <li><Link to="/">Home</Link></li> */}
+        {/*   <li><Link to="/about">About</Link></li> */}
+        {/* </ul> */}
         {this.props.children}
       </div>
     )
@@ -39,6 +38,7 @@ const About = () => (
   </div>
 )
 
+// TODO: Implement this
 const NoMatch = ({ location }) => (
   <div>
     <h2>Whoops</h2>
@@ -50,7 +50,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
-        <IndexRoute component={HomeContainer}/>
+        <IndexRoute component={UserInfoContainer}/>
         <Route path="/about" component={About}/>
       </Route>
     </Router>
