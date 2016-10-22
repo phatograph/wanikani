@@ -20,18 +20,11 @@ const Kanji = ({ kanji }) => (
   </div>
 )
 
-const NavLink = React.createClass({
-  render() {
-    const level = this.props.index + 1
-    return (
-      <Link to={`/level/${level}`}>{level}</Link>
-    )
-  }
-})
+const NavLink = ({ index, level, onClick }) => (
+  <Link to={`/level/${index}`} onClick={ () => onClick({ level: index })}>{index}</Link>
+)
 
 const UserInfo = React.createClass({
-  componentDidUpdate(prevProps, prevState) {
-  },
   componentDidMount() {
     this.props.onLoad({ level: this.props.params.level })
   },
@@ -42,7 +35,7 @@ const UserInfo = React.createClass({
     return (
       <div>
         <div className={style.nav}>
-          { Array.from('x'.repeat(level)).map((x, i) => <NavLink key={i} index={i} level={this.props.params.level} /> )}
+          { Array.from('x'.repeat(level)).map((x, i) => <NavLink key={i} index={i + 1} onClick={this.props.onLoad} level={this.props.params.level} /> )}
         </div>
         <div className={style.kanjiList}>
           { kanjis.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
@@ -52,32 +45,28 @@ const UserInfo = React.createClass({
   }
 })
 
-const fetchUserInfo = (dispatch) => {
+const fetchUserInfo = ({ level, dispatch }) => {
   return {
     type: 'FETCH_USER_INFO',
+    level,
     dispatch
   }
 }
 
-const fetchKanji = ({ userInfo, dispatch }) => {
+const fetchKanji = ({ level, userInfo, dispatch }) => {
   return {
     type: 'FETCH_KANJI',
+    level,
     userInfo,
     dispatch
   }
 }
 
-const fetchUserInfoSuccess = (userInfo) => {
-  return {
-    type: 'FETCH_USER_INFO_SUCCESS',
-    userInfo
-  }
-}
-
 const fetchKanjiSuccess = (kanjis) => {
   kanjis.requested_information = kanjis.requested_information.sort((a, b) => {
-    if (!a.user_specific) a.user_specific = { srs_numeric: 0 }
-    if (!b.user_specific) b.user_specific = { srs_numeric: 0 }
+    const defaultSrs = { srs_numeric: 0, srs: 'novice'  }
+    if (!a.user_specific) a.user_specific = defaultSrs
+    if (!b.user_specific) b.user_specific = defaultSrs
 
     return a.user_specific.srs_numeric - b.user_specific.srs_numeric
   })
@@ -91,21 +80,28 @@ const fetchKanjiSuccess = (kanjis) => {
 export const userInfo = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
-      fetch('http://localhost:4000/state.json')
-      .then(res => res.json())
-      .then(kanji => action.dispatch(fetchKanjiSuccess(kanji.computedStates[2].state.userInfo)))
+      // fetch('http://localhost:4000/state.json')
+      //   .then(res => res.json())
+      //   .then(userInfo => action.dispatch(fetchKanji({
+      //     level: action.level,
+      //     userInfo: userInfo.computedStates[2].state.userInfo,
+      //     dispatch: action.dispatch
+      //   })))
 
-      // fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information', { timeout: 10000 })
-      //   .then(response => response.json())
-      //   .then(userInfo => action.dispatch(fetchKanji({ userInfo, dispatch: action.dispatch })))
+      fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information', { timeout: 10000 })
+        .then(response => response.json())
+        .then(userInfo => action.dispatch(fetchKanji({
+          level: action.level,
+          userInfo,
+          dispatch: action.dispatch
+        })))
       return state
     case 'FETCH_KANJI':
-      fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/2`, { timeout: 10000 })
+      const level = action.level || action.userInfo.user_information.level
+      fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${level}`, { timeout: 10000 })
         .then(response => response.json())
         .then(kanji => action.dispatch(fetchKanjiSuccess(kanji)))
       return state
-    case 'FETCH_USER_INFO_SUCCESS':
-      return Immutable.fromJS(action.userInfo)
     case 'FETCH_KANJI_SUCCESS':
       return Immutable.fromJS(action.kanjis)
     default:
@@ -122,7 +118,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onLoad: ({ level }) => {
-      dispatch(fetchUserInfo(dispatch))
+      dispatch(fetchUserInfo({ level, dispatch }))
     }
   }
 }

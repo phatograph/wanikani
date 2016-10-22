@@ -7,12 +7,11 @@ import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
 import { userInfo, UserInfoContainer } from './containers/UserInfoContainer'
-import { kanjiList, HomeContainer } from './containers/HomeContainer'
+// import { kanjiList, HomeContainer } from './containers/HomeContainer'
 
 const initialState = Immutable.Map()
 const store = createStore(combineReducers({
-  userInfo,
-  kanjiList
+  userInfo
 }),
 initialState,
 window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
