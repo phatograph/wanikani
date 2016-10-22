@@ -52,6 +52,7 @@ ReactDOM.render(
       <Route path="/" component={App}>
         <IndexRoute component={UserInfoContainer}/>
         <Route path="/about" component={About}/>
+        <Route path="/level/:level" component={UserInfoContainer}/>
       </Route>
     </Router>
   </Provider>,

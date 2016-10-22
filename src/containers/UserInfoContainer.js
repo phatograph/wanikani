@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import fetchJsonp from 'fetch-jsonp'
 import Immutable from 'immutable'
+import { Link } from 'react-router'
 
 import style from './../../assets/css/style.css'
 
@@ -19,16 +20,33 @@ const Kanji = ({ kanji }) => (
   </div>
 )
 
+const NavLink = React.createClass({
+  render() {
+    const level = this.props.index + 1
+    return (
+      <Link to={`/level/${level}`}>{level}</Link>
+    )
+  }
+})
+
 const UserInfo = React.createClass({
+  componentDidUpdate(prevProps, prevState) {
+  },
   componentDidMount() {
-    this.props.onLoad()
+    this.props.onLoad({ level: this.props.params.level })
   },
   render() {
+    const level = this.props.userInfo.getIn(['user_information', 'level'])
     const kanjis = this.props.userInfo.get('requested_information', [])
 
     return (
-      <div className={style.kanjiList}>
-        { kanjis.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
+      <div>
+        <div className={style.nav}>
+          { Array.from('x'.repeat(level)).map((x, i) => <NavLink key={i} index={i} level={this.props.params.level} /> )}
+        </div>
+        <div className={style.kanjiList}>
+          { kanjis.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
+        </div>
       </div>
     )
   }
@@ -73,9 +91,13 @@ const fetchKanjiSuccess = (kanjis) => {
 export const userInfo = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
-      fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information', { timeout: 10000 })
-        .then(response => response.json())
-        .then(userInfo => action.dispatch(fetchKanji({ userInfo, dispatch: action.dispatch })))
+      fetch('http://localhost:4000/state.json')
+      .then(res => res.json())
+      .then(kanji => action.dispatch(fetchKanjiSuccess(kanji.computedStates[2].state.userInfo)))
+
+      // fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information', { timeout: 10000 })
+      //   .then(response => response.json())
+      //   .then(userInfo => action.dispatch(fetchKanji({ userInfo, dispatch: action.dispatch })))
       return state
     case 'FETCH_KANJI':
       fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/2`, { timeout: 10000 })
@@ -99,7 +121,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoad: () => dispatch(fetchUserInfo(dispatch))
+    onLoad: ({ level }) => {
+      dispatch(fetchUserInfo(dispatch))
+    }
   }
 }
 
