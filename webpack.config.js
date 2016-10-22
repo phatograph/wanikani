@@ -1,4 +1,5 @@
 var autoprefixer = require('autoprefixer');
+var cssreset     = require('postcss-css-reset');
 var path         = require('path');
 var BUILD_DIR    = path.resolve(__dirname, 'public');
 
@@ -38,7 +39,7 @@ module.exports = {
     configFile: `./.eslintrc`
   },
   postcss: function () {
-    return [autoprefixer];
+    return [autoprefixer, cssreset];
   },
   devServer: {
     colors: true,

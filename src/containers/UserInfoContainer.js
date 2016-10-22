@@ -3,12 +3,19 @@ import { connect } from 'react-redux'
 import fetchJsonp from 'fetch-jsonp'
 import Immutable from 'immutable'
 
+import style from './../../assets/css/style.css'
+
 const Kanji = ({ kanji }) => (
-  <div>
-    <div>{ kanji.get('character') }</div>
-    <div>{ kanji.getIn(['user_specific', 'srs_numeric']) }</div>
-    <div>{ kanji.getIn(['user_specific', 'srs']) }</div>
-    <br />
+  <div className={style.kanji}>
+    <div className={style.wrapper}>
+      <div className={style.character}>{ kanji.get('character') }</div>
+      <div>
+        Lvl&nbsp;
+        { kanji.getIn(['user_specific', 'srs_numeric']) }
+        &nbsp;
+        { kanji.getIn(['user_specific', 'srs']) }
+      </div>
+    </div>
   </div>
 )
 
@@ -20,7 +27,7 @@ const UserInfo = React.createClass({
     const kanjis = this.props.userInfo.get('requested_information', [])
 
     return (
-      <div>
+      <div className={style.kanjiList}>
         { kanjis.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
       </div>
     )

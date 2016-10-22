@@ -1,7 +1,26 @@
+@reset-global pc;
+
 body {
   font-family: Helvetica;
+  padding: 5px;
+}
 
-  a {
-    text-decoration: none;
-  }
+.kanjiList {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.kanji {
+  width: calc(100% / 3);
+}
+
+.wrapper {
+  background-color: #ff7777;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
+}
+
+.character {
+  font-size: 30px;
 }
