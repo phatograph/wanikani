@@ -63,14 +63,6 @@ const fetchKanji = ({ level, userInfo, dispatch }) => {
 }
 
 const fetchKanjiSuccess = (kanjis) => {
-  kanjis.requested_information = kanjis.requested_information.sort((a, b) => {
-    const defaultSrs = { srs_numeric: 0, srs: 'novice'  }
-    if (!a.user_specific) a.user_specific = defaultSrs
-    if (!b.user_specific) b.user_specific = defaultSrs
-
-    return a.user_specific.srs_numeric - b.user_specific.srs_numeric
-  })
-
   return {
     type: 'FETCH_KANJI_SUCCESS',
     kanjis
@@ -103,6 +95,14 @@ export const userInfo = (state = Immutable.Map(), action) => {
         .then(kanji => action.dispatch(fetchKanjiSuccess(kanji)))
       return state
     case 'FETCH_KANJI_SUCCESS':
+      action.kanjis.requested_information = action.kanjis.requested_information.sort((a, b) => {
+        const defaultSrs = { srs_numeric: 0, srs: 'novice'  }
+        if (!a.user_specific) a.user_specific = defaultSrs
+        if (!b.user_specific) b.user_specific = defaultSrs
+
+        return a.user_specific.srs_numeric - b.user_specific.srs_numeric
+      })
+
       return Immutable.fromJS(action.kanjis)
     default:
       return state
