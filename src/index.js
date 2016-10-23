@@ -6,14 +6,14 @@ import { createStore } from 'redux'
 import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
-import { userInfo, UserInfoContainer } from './containers/UserInfoContainer'
+import { userInfoReducer, kanjisReducer, UserInfoContainer } from './containers/UserInfoContainer'
 // import { kanjiList, HomeContainer } from './containers/HomeContainer'
 
-const initialState = Immutable.Map()
 const store = createStore(combineReducers({
-  userInfo
+  userInfoReducer,
+  kanjisReducer
 }),
-initialState,
+Immutable.Map(),
 window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 const App = React.createClass({

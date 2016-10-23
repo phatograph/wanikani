@@ -29,8 +29,8 @@ const UserInfo = React.createClass({
     this.props.onLoad({ level: this.props.params.level })
   },
   render() {
-    const level = this.props.userInfo.getIn(['user_information', 'level'])
-    const kanjis = this.props.userInfo.get('requested_information', [])
+    const level = this.props.userInfo.get('level')
+    const kanjis = this.props.kanjis.toArray()
 
     return (
       <div>
@@ -53,6 +53,15 @@ const fetchUserInfo = ({ level, dispatch }) => {
   }
 }
 
+const fetchUserInfoSuccess = ({ level, userInfo, dispatch }) => {
+  return {
+    type: 'FETCH_USER_INFO_SUCCESS',
+    level,
+    userInfo,
+    dispatch
+  }
+}
+
 const fetchKanji = ({ level, userInfo, dispatch }) => {
   return {
     type: 'FETCH_KANJI',
@@ -69,7 +78,7 @@ const fetchKanjiSuccess = (kanjis) => {
   }
 }
 
-export const userInfo = (state = Immutable.Map(), action) => {
+export const userInfoReducer = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
       // fetch('http://localhost:4000/state.json')
@@ -82,13 +91,31 @@ export const userInfo = (state = Immutable.Map(), action) => {
 
       fetchJsonp('https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/user-information', { timeout: 10000 })
         .then(response => response.json())
-        .then(userInfo => action.dispatch(fetchKanji({
+        .then(userInfo => action.dispatch(fetchUserInfoSuccess({
           level: action.level,
           userInfo,
           dispatch: action.dispatch
         })))
 
       return state
+    case 'FETCH_USER_INFO_SUCCESS':
+      // Need async, or else: `Reducers may not dispatch action`.
+      setTimeout(() => {
+        action.dispatch(fetchKanji({
+          level: action.level,
+          userInfo: action.userInfo,
+          dispatch: action.dispatch
+        }))
+      }, 10)
+
+      return Immutable.fromJS(action.userInfo.user_information)
+    default:
+      return state
+  }
+}
+
+export const kanjisReducer = (state = Immutable.Map(), action) => {
+  switch (action.type) {
     case 'FETCH_KANJI':
       // In case of accessing from root domain.
       const level = action.level || action.userInfo.user_information.level
@@ -107,7 +134,7 @@ export const userInfo = (state = Immutable.Map(), action) => {
         return a.user_specific.srs_numeric - b.user_specific.srs_numeric
       })
 
-      return Immutable.fromJS(action.kanjis)
+      return Immutable.fromJS(action.kanjis.requested_information)
     default:
       return state
   }
@@ -115,7 +142,8 @@ export const userInfo = (state = Immutable.Map(), action) => {
 
 const mapStateToProps = (state) => {
   return {
-    userInfo: state.get('userInfo')
+    userInfo: state.get('userInfoReducer'),
+    kanjis: state.get('kanjisReducer')
   }
 }
 
