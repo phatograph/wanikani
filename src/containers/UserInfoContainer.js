@@ -20,8 +20,8 @@ const Kanji = ({ kanji }) => (
   </div>
 )
 
-const NavLink = ({ index, level, onClick }) => (
-  <Link to={`/level/${index}`} onClick={ () => onClick({ level: index })}>{index}</Link>
+const NavLink = ({ index, level, userInfo, onClick }) => (
+  <Link to={`/level/${index}`} onClick={ () => onClick({ level: index, userInfo })}>{index}</Link>
 )
 
 const UserInfo = React.createClass({
@@ -35,7 +35,7 @@ const UserInfo = React.createClass({
     return (
       <div>
         <div className={style.nav}>
-          { Array.from('x'.repeat(level)).map((x, i) => <NavLink key={i} index={i + 1} onClick={this.props.onLoad} level={this.props.params.level} /> )}
+          { Array.from('x'.repeat(level)).map((x, i) => <NavLink key={i} index={i + 1} onClick={this.props.onClick} userInfo={this.props.userInfo} level={this.props.params.level} /> )}
         </div>
         <div className={style.kanjiList}>
           { kanjis.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
@@ -87,16 +87,20 @@ export const userInfo = (state = Immutable.Map(), action) => {
           userInfo,
           dispatch: action.dispatch
         })))
+
       return state
     case 'FETCH_KANJI':
+      // In case of accessing from root domain.
       const level = action.level || action.userInfo.user_information.level
+
       fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${level}`, { timeout: 10000 })
         .then(response => response.json())
         .then(kanji => action.dispatch(fetchKanjiSuccess(kanji)))
+
       return state
     case 'FETCH_KANJI_SUCCESS':
       action.kanjis.requested_information = action.kanjis.requested_information.sort((a, b) => {
-        const defaultSrs = { srs_numeric: 0, srs: 'novice'  }
+        const defaultSrs = { srs_numeric: 0, srs: 'novice' }
         if (!a.user_specific) a.user_specific = defaultSrs
         if (!b.user_specific) b.user_specific = defaultSrs
 
@@ -117,8 +121,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoad: ({ level }) => {
-      dispatch(fetchUserInfo({ level, dispatch }))
+    onLoad: ({ level }) => dispatch(fetchUserInfo({ level, dispatch })),
+    onClick: ({ level, userInfo }) => {
+      // Assume that `userInfo` is already present.
+      return dispatch(fetchKanji({
+        level,
+        userInfo,
+        dispatch
+      }))
     }
   }
 }
