@@ -21,7 +21,13 @@ const Kanji = ({ kanji }) => (
 )
 
 const NavLink = ({ level, onClick }) => (
-  <Link to={`/level/${level}`} onClick={ () => onClick({ level })}>{level}</Link>
+  <Link
+    to={`/level/${level}`}
+    onClick={ () => onClick({ level })}
+    className={style.navLink}
+    activeClassName={style.navLinkActive}>
+    {level}
+  </Link>
 )
 
 const UserInfo = React.createClass({

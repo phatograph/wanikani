@@ -3,10 +3,10 @@
 body {
   font-family: Helvetica;
   padding: 5px;
+}
 
-  a {
-    text-decoration: none;
-  }
+a {
+  text-decoration: none;
 }
 
 .kanjiList {
@@ -32,12 +32,17 @@ body {
 
 .nav {
   display: flex;
+}
 
-  a {
-    display: block;
-    background-color: #ffaaaa;
-    margin: 5px;
-    padding: 20px 30px;
-    color: #000;
-  }
+.navLink {
+  display: block;
+  background-color: #ffaaaa;
+  margin: 5px;
+  padding: 20px 30px;
+  color: #000;
+}
+
+.navLinkActive {
+  composes: navLink;
+  background-color: #ff7777;
 }
