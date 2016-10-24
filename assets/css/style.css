@@ -10,7 +10,10 @@ a {
 }
 
 h2 {
-  padding: 5px;
+  padding: 10px;
+  margin: 5px;
+  background-color: #555;
+  color: #fff;
 }
 
 .kanjiList {
