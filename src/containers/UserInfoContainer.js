@@ -33,7 +33,7 @@ const UserInfo = React.createClass({
             <NavLink key={i} index={i + 1} onClick={this.props.onClick} userLevel={userLevel} />
           )) }
         </div>
-        {this.props.children}
+        <KanjiContainer currentLevel={this.props.params.level || userLevel} />
       </div>
     )
   }

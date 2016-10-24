@@ -7,7 +7,7 @@ import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
 import { userInfoReducer, UserInfoContainer } from './containers/UserInfoContainer'
-import { kanjiReducer, KanjiContainer } from './containers/KanjiContainer'
+import { kanjiReducer } from './containers/KanjiContainer'
 
 const store = createStore(combineReducers({
   userInfoReducer,
@@ -33,10 +33,8 @@ const NoMatch = ({ location }) => (
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={UserInfoContainer}>
-        <IndexRoute component={KanjiContainer}/>
-        <Route path="/level/:level" component={KanjiContainer}/>
-      </Route>
+      <Route path="/" component={UserInfoContainer} />
+      <Route path="/level/:level" component={UserInfoContainer} />
     </Router>
   </Provider>,
   document.querySelector('#app')

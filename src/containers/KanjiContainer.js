@@ -19,18 +19,15 @@ const Kanji = ({ kanji }) => (
   </div>
 )
 
-const Kanjis = React.createClass({
-  render() {
-    const currentLevel = this.props.params.level || this.props.userLevel
-    const kanjis = this.props.kanjis.get(`level${currentLevel}`, Immutable.List()).toArray()
+const Kanjis = ({ currentLevel, kanjis }) => {
+  const kanjisA = kanjis.get(`level${currentLevel}`, Immutable.List()).toArray()
 
-    return (
-      <div className={style.kanjiList}>
-        { kanjis.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
-      </div>
-    )
-  }
-})
+  return (
+    <div className={style.kanjiList}>
+      { kanjisA.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
+    </div>
+  )
+}
 
 export const fetchKanji = ({ currentLevel, dispatch }) => {
   return {
