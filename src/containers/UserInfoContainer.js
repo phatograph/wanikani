@@ -65,11 +65,10 @@ const fetchUserInfoSuccess = ({ level, userInfo, dispatch }) => {
   }
 }
 
-const fetchKanji = ({ level, userInfo, dispatch }) => {
+const fetchKanji = ({ level, dispatch }) => {
   return {
     type: 'FETCH_KANJI',
     level,
-    userInfo,
     dispatch
   }
 }
@@ -106,8 +105,7 @@ export const userInfoReducer = (state = Immutable.Map(), action) => {
       // Need async, or else: `Reducers may not dispatch action`.
       setTimeout(() => {
         action.dispatch(fetchKanji({
-          level: action.level,
-          userInfo: action.userInfo,
+          level: action.level || action.userInfo.user_information.level,
           dispatch: action.dispatch
         }))
       }, 10)
@@ -121,13 +119,10 @@ export const userInfoReducer = (state = Immutable.Map(), action) => {
 export const kanjisReducer = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_KANJI':
-      // In case of accessing from root domain.
-      const level = action.level || action.userInfo.user_information.level
-
       if (!state.get(`level${action.level}`)) {
-        fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${level}`, { timeout: 10000 })
+        fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${action.level}`, { timeout: 10000 })
           .then(response => response.json())
-          .then(kanjis => action.dispatch(fetchKanjiSuccess({ kanjis, level })))
+          .then(kanjis => action.dispatch(fetchKanjiSuccess({ kanjis, level: action.level })))
       }
       else {
         setTimeout(() => {
@@ -166,7 +161,6 @@ const mapDispatchToProps = (dispatch) => {
       // Assume that `userInfo` is already present.
       return dispatch(fetchKanji({
         level,
-        userInfo,
         dispatch
       }))
     }
