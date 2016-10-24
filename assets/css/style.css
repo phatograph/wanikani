@@ -20,7 +20,7 @@ h2 {
 
 .kanji {
   width: calc(100% / 3 - 10px);
-  background-color: #ff7777;
+  background-color: #f100a1;
   margin: 5px;
   text-align: center;
   color: #fff;
@@ -28,7 +28,12 @@ h2 {
 
 .radical {
   composes: kanji;
-  background-color: #7777ff;
+  background-color: #00a1f1;
+}
+
+.vocab {
+  composes: kanji;
+  background-color: #a100f1;
 }
 
 .wrapper {
@@ -40,6 +45,10 @@ h2 {
   margin-bottom: 3px;
   text-align: center;
   display: inline-block;
+}
+
+.srsLevel {
+  font-size: 11px;
 }
 
 .characterImgWrapper {

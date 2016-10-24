@@ -46,3 +46,19 @@ export const fetchKanjiSuccess = ({ kanjis, currentLevel }) => {
     currentLevel
   }
 }
+
+export const fetchVocab = ({ currentLevel, dispatch }) => {
+  return {
+    type: 'FETCH_VOCAB',
+    currentLevel,
+    dispatch
+  }
+}
+
+export const fetchVocabSuccess = ({ vocabs, currentLevel }) => {
+  return {
+    type: 'FETCH_VOCAB_SUCCESS',
+    vocabs,
+    currentLevel
+  }
+}

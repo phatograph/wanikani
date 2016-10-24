@@ -2,8 +2,10 @@ import Immutable from 'immutable'
 import fetchJsonp from 'fetch-jsonp'
 
 import {
-  fetchUserInfo, fetchUserInfoSuccess, fetchRadical, fetchRadicalSuccess,
-  fetchKanji, fetchKanjiSuccess
+  fetchUserInfo, fetchUserInfoSuccess,
+  fetchRadical, fetchRadicalSuccess,
+  fetchKanji, fetchKanjiSuccess,
+  fetchVocab, fetchVocabSuccess
 } from './actions'
 
 export const userInfoReducer = (state = Immutable.Map(), action) => {
@@ -23,12 +25,17 @@ export const userInfoReducer = (state = Immutable.Map(), action) => {
     case 'FETCH_USER_INFO_SUCCESS':
       // Need async, or else: `Reducers may not dispatch action`.
       setTimeout(() => {
+        action.dispatch(fetchRadical({
+          currentLevel: action.currentLevel,
+          dispatch: action.dispatch
+        }))
+
         action.dispatch(fetchKanji({
           currentLevel: action.currentLevel,
           dispatch: action.dispatch
         }))
 
-        action.dispatch(fetchRadical({
+        action.dispatch(fetchVocab({
           currentLevel: action.currentLevel,
           dispatch: action.dispatch
         }))
@@ -97,6 +104,37 @@ export const kanjiReducer = (state = Immutable.Map(), action) => {
 
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.kanjis.requested_information))
     case 'FETCH_KANJI_CACHE':
+    default:
+      return state
+  }
+}
+
+export const vocabReducer = (state = Immutable.Map(), action) => {
+  switch (action.type) {
+    case 'FETCH_VOCAB':
+      if (!state.get(`level${action.currentLevel}`)) {
+        fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/vocabulary/${action.currentLevel}`, { timeout: 10000 })
+          .then(response => response.json())
+          .then(vocabs => action.dispatch(fetchVocabSuccess({ vocabs, currentLevel: action.currentLevel })))
+      }
+      else {
+        setTimeout(() => {
+          action.dispatch({ type: 'FETCH_VOCAB_CACHE' })
+        }, 10)
+      }
+
+      return state
+    case 'FETCH_VOCAB_SUCCESS':
+      action.vocabs.requested_information = action.vocabs.requested_information.sort((a, b) => {
+        const defaultSrs = { srs_numeric: 0, srs: 'novice' }
+        if (!a.user_specific) a.user_specific = defaultSrs
+        if (!b.user_specific) b.user_specific = defaultSrs
+
+        return a.user_specific.srs_numeric - b.user_specific.srs_numeric
+      })
+
+      return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.vocabs.requested_information))
+    case 'FETCH_VOCAB_CACHE':
     default:
       return state
   }

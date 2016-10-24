@@ -3,8 +3,10 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 import {
-  fetchUserInfo, fetchUserInfoSuccess, fetchRadical, fetchRadicalSuccess,
-  fetchKanji, fetchKanjiSuccess
+  fetchUserInfo, fetchUserInfoSuccess,
+  fetchRadical, fetchRadicalSuccess,
+  fetchKanji, fetchKanjiSuccess,
+  fetchVocab, fetchVocabSuccess
 } from './../actions'
 
 import { Entities } from './../presentationals/Entity'
@@ -37,8 +39,9 @@ const UserInfo = React.createClass({
             <NavLink key={i} index={i + 1} onClick={this.props.onClick} userLevel={userLevel} />
           )) }
         </div>
-        <Entities entities={this.props.radicals} text="Radicals" klassName={style.radical} currentLevel={this.props.params.level || userLevel} />
-        <Entities entities={this.props.kanjis}   text="Kanjis"   klassName={style.kanji}   currentLevel={this.props.params.level || userLevel} />
+        <Entities entities={this.props.radicals} text="Radicals"     klassName={style.radical} currentLevel={this.props.params.level || userLevel} />
+        <Entities entities={this.props.kanjis}   text="Kanjis"       klassName={style.kanji}   currentLevel={this.props.params.level || userLevel} />
+        <Entities entities={this.props.vocabs}   text="Vocabularies" klassName={style.vocab}   currentLevel={this.props.params.level || userLevel} />
       </div>
     )
   }
@@ -48,7 +51,8 @@ const mapStateToProps = (state) => {
   return {
     userInfo: state.get('userInfoReducer'),
     radicals: state.get('radicalReducer'),
-    kanjis: state.get('kanjiReducer')
+    kanjis: state.get('kanjiReducer'),
+    vocabs: state.get('vocabReducer')
   }
 }
 
@@ -58,6 +62,7 @@ const mapDispatchToProps = (dispatch) => {
     onClick: ({ currentLevel }) => {
       dispatch(fetchKanji({ currentLevel, dispatch }))
       dispatch(fetchRadical({ currentLevel, dispatch }))
+      dispatch(fetchVocab({ currentLevel, dispatch }))
     }
   }
 }

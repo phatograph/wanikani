@@ -17,7 +17,7 @@ const Entity = ({ entity, klassName }) => (
   <div className={klassName}>
     <div className={style.wrapper}>
       <div className={style.character}><Char entity={ entity } /></div>
-      <div>
+      <div className={style.srsLevel}>
         Lvl&nbsp;
         { entity.getIn(['user_specific', 'srs_numeric']) }
         &nbsp;
