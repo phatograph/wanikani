@@ -29,13 +29,16 @@ const UserInfo = React.createClass({
     this.props.onLoad({ level: this.props.params.level })
   },
   render() {
-    const level = this.props.userInfo.get('level')
-    const kanjis = this.props.kanjis.toArray()
+    const userLevel    = this.props.userInfo.get('level')
+    const currentLevel = this.props.params.level
+    const kanjis       = this.props.kanjis.get(`level${currentLevel || userLevel}`, Immutable.List()).toArray()
 
     return (
       <div>
         <div className={style.nav}>
-          { Array.from('x'.repeat(level)).map((x, i) => <NavLink key={i} index={i + 1} onClick={this.props.onClick} userInfo={this.props.userInfo} level={this.props.params.level} /> )}
+          { Array.from('x'.repeat(userLevel)).map((x, i) => (
+            <NavLink key={i} index={i + 1} onClick={this.props.onClick} userInfo={this.props.userInfo} level={currentLevel} />
+          )) }
         </div>
         <div className={style.kanjiList}>
           { kanjis.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
@@ -71,10 +74,11 @@ const fetchKanji = ({ level, userInfo, dispatch }) => {
   }
 }
 
-const fetchKanjiSuccess = (kanjis) => {
+const fetchKanjiSuccess = ({ kanjis, level }) => {
   return {
     type: 'FETCH_KANJI_SUCCESS',
-    kanjis
+    kanjis,
+    level
   }
 }
 
@@ -120,9 +124,16 @@ export const kanjisReducer = (state = Immutable.Map(), action) => {
       // In case of accessing from root domain.
       const level = action.level || action.userInfo.user_information.level
 
-      fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${level}`, { timeout: 10000 })
-        .then(response => response.json())
-        .then(kanji => action.dispatch(fetchKanjiSuccess(kanji)))
+      if (!state.get(`level${action.level}`)) {
+        fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${level}`, { timeout: 10000 })
+          .then(response => response.json())
+          .then(kanjis => action.dispatch(fetchKanjiSuccess({ kanjis, level })))
+      }
+      else {
+        setTimeout(() => {
+          action.dispatch({ type: 'FETCH_KANJI_CACHE' })
+        }, 10)
+      }
 
       return state
     case 'FETCH_KANJI_SUCCESS':
@@ -134,7 +145,8 @@ export const kanjisReducer = (state = Immutable.Map(), action) => {
         return a.user_specific.srs_numeric - b.user_specific.srs_numeric
       })
 
-      return Immutable.fromJS(action.kanjis.requested_information)
+      return state.set(`level${action.level}`, Immutable.fromJS(action.kanjis.requested_information))
+    case 'FETCH_KANJI_CACHE':
     default:
       return state
   }
