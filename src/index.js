@@ -8,13 +8,16 @@ import { combineReducers } from 'redux-immutable'
 
 import { userInfoReducer, UserInfoContainer } from './containers/UserInfoContainer'
 import { kanjiReducer } from './containers/KanjiContainer'
+import { radicalReducer } from './containers/RadicalContainer'
 
 const store = createStore(combineReducers({
-  userInfoReducer,
-  kanjiReducer
-}),
-Immutable.Map(),
-window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    userInfoReducer,
+    kanjiReducer,
+    radicalReducer
+  }),
+  Immutable.Map(),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
 
 const About = () => (
   <div>

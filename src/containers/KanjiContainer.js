@@ -23,8 +23,11 @@ const Kanjis = ({ currentLevel, kanjis }) => {
   const kanjisA = kanjis.get(`level${currentLevel}`, Immutable.List()).toArray()
 
   return (
-    <div className={style.kanjiList}>
-      { kanjisA.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
+    <div>
+      <h2>Kanjis</h2>
+      <div className={style.kanjiList}>
+        { kanjisA.map((kanji, i) => <Kanji key={i} kanji={kanji} /> )}
+      </div>
     </div>
   )
 }
@@ -78,7 +81,6 @@ export const kanjiReducer = (state = Immutable.Map(), action) => {
 
 const mapStateToProps = (state) => {
   return {
-    userLevel: state.getIn(['userInfoReducer', 'level']),
     kanjis: state.get('kanjiReducer')
   }
 }

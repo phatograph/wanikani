@@ -4,6 +4,7 @@ import fetchJsonp from 'fetch-jsonp'
 import Immutable from 'immutable'
 import { Link } from 'react-router'
 import { fetchKanji, KanjiContainer } from './KanjiContainer'
+import { fetchRadical, RadicalContainer } from './RadicalContainer'
 
 import style from './../../assets/css/style.css'
 
@@ -33,6 +34,7 @@ const UserInfo = React.createClass({
             <NavLink key={i} index={i + 1} onClick={this.props.onClick} userLevel={userLevel} />
           )) }
         </div>
+        <RadicalContainer currentLevel={this.props.params.level || userLevel} />
         <KanjiContainer currentLevel={this.props.params.level || userLevel} />
       </div>
     )
@@ -77,6 +79,11 @@ export const userInfoReducer = (state = Immutable.Map(), action) => {
           currentLevel: action.currentLevel,
           dispatch: action.dispatch
         }))
+
+        action.dispatch(fetchRadical({
+          currentLevel: action.currentLevel,
+          dispatch: action.dispatch
+        }))
       }, 10)
 
       return Immutable.fromJS(action.userInfo.user_information)
@@ -94,7 +101,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onLoad:  ({ currentLevel }) => dispatch(fetchUserInfo({ currentLevel, dispatch })),
-    onClick: ({ currentLevel }) => dispatch(fetchKanji({currentLevel,dispatch}))
+    onClick: ({ currentLevel }) => {
+      dispatch(fetchKanji({ currentLevel, dispatch }))
+      dispatch(fetchRadical({ currentLevel, dispatch }))
+    }
   }
 }
 

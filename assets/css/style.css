@@ -9,25 +9,47 @@ a {
   text-decoration: none;
 }
 
+h2 {
+  padding: 5px;
+}
+
 .kanjiList {
   display: flex;
   flex-wrap: wrap;
 }
 
 .kanji {
-  width: calc(100% / 3);
+  width: calc(100% / 3 - 10px);
+  background-color: #ff7777;
+  margin: 5px;
+  text-align: center;
+  color: #fff;
+}
+
+.radical {
+  composes: kanji;
+  background-color: #7777ff;
 }
 
 .wrapper {
-  background-color: #ff7777;
-  margin: 5px;
-  padding: 5px;
-  text-align: center;
+  padding: 10px;
 }
 
 .character {
   font-size: 30px;
   margin-bottom: 3px;
+  text-align: center;
+  display: inline-block;
+}
+
+.characterImgWrapper {
+  display: flex;
+  height: 1.4em;
+}
+
+.characterImg {
+  width: 30px;
+  align-self: center;
 }
 
 .nav {
