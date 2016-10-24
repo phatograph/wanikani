@@ -63,7 +63,7 @@ export const userInfoReducer = (state = Immutable.Map(), action) => {
         .then(response => response.json())
         .then(userInfo => {
           action.dispatch(fetchUserInfoSuccess({
-            currentLevel: action.currentLevel,
+            currentLevel: action.currentLevel || userInfo.user_information.level,
             userInfo,
             dispatch: action.dispatch
           }))

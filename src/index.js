@@ -34,6 +34,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={UserInfoContainer}>
+        <IndexRoute component={KanjiContainer}/>
         <Route path="/level/:level" component={KanjiContainer}/>
       </Route>
     </Router>

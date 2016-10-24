@@ -21,7 +21,7 @@ const Kanji = ({ kanji }) => (
 
 const Kanjis = React.createClass({
   render() {
-    const currentLevel = this.props.params.level
+    const currentLevel = this.props.params.level || this.props.userLevel
     const kanjis = this.props.kanjis.get(`level${currentLevel}`, Immutable.List()).toArray()
 
     return (
@@ -81,6 +81,7 @@ export const kanjiReducer = (state = Immutable.Map(), action) => {
 
 const mapStateToProps = (state) => {
   return {
+    userLevel: state.getIn(['userInfoReducer', 'level']),
     kanjis: state.get('kanjiReducer')
   }
 }
