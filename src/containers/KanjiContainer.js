@@ -19,7 +19,7 @@ const Kanji = ({ kanji }) => (
   </div>
 )
 
-const Kanjis = ({ currentLevel, kanjis }) => {
+export const Kanjis = ({ currentLevel, kanjis }) => {
   const kanjisA = kanjis.get(`level${currentLevel}`, Immutable.List()).toArray()
 
   return (
@@ -31,66 +31,3 @@ const Kanjis = ({ currentLevel, kanjis }) => {
     </div>
   )
 }
-
-export const fetchKanji = ({ currentLevel, dispatch }) => {
-  return {
-    type: 'FETCH_KANJI',
-    currentLevel,
-    dispatch
-  }
-}
-
-const fetchKanjiSuccess = ({ kanjis, currentLevel }) => {
-  return {
-    type: 'FETCH_KANJI_SUCCESS',
-    kanjis,
-    currentLevel
-  }
-}
-
-export const kanjiReducer = (state = Immutable.Map(), action) => {
-  switch (action.type) {
-    case 'FETCH_KANJI':
-      if (!state.get(`level${action.currentLevel}`)) {
-        fetchJsonp(`https://www.wanikani.com/api/user/8a026e69d462dd088b40b12b99437328/kanji/${action.currentLevel}`, { timeout: 10000 })
-          .then(response => response.json())
-          .then(kanjis => action.dispatch(fetchKanjiSuccess({ kanjis, currentLevel: action.currentLevel })))
-      }
-      else {
-        setTimeout(() => {
-          action.dispatch({ type: 'FETCH_KANJI_CACHE' })
-        }, 10)
-      }
-
-      return state
-    case 'FETCH_KANJI_SUCCESS':
-      action.kanjis.requested_information = action.kanjis.requested_information.sort((a, b) => {
-        const defaultSrs = { srs_numeric: 0, srs: 'novice' }
-        if (!a.user_specific) a.user_specific = defaultSrs
-        if (!b.user_specific) b.user_specific = defaultSrs
-
-        return a.user_specific.srs_numeric - b.user_specific.srs_numeric
-      })
-
-      return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.kanjis.requested_information))
-    case 'FETCH_KANJI_CACHE':
-    default:
-      return state
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    kanjis: state.get('kanjiReducer')
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
-
-export const KanjiContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Kanjis)
