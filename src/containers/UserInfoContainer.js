@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import fetchJsonp from 'fetch-jsonp'
 import Immutable from 'immutable'
 import { Link } from 'react-router'
-import { Kanjis } from './KanjiContainer'
-import { Radicals } from './RadicalContainer'
+import { Radicals } from './../presentationals/Radical'
 
 import style from './../../assets/css/style.css'
 
