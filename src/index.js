@@ -6,30 +6,15 @@ import { createStore } from 'redux'
 import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
-import { userInfoReducer, kanjisReducer, UserInfoContainer } from './containers/UserInfoContainer'
-// import { kanjiList, HomeContainer } from './containers/HomeContainer'
+import { userInfoReducer, UserInfoContainer } from './containers/UserInfoContainer'
+import { kanjiReducer, KanjiContainer } from './containers/KanjiContainer'
 
 const store = createStore(combineReducers({
   userInfoReducer,
-  kanjisReducer
+  kanjiReducer
 }),
 Immutable.Map(),
 window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-
-const App = React.createClass({
-  render() {
-    return (
-      <div>
-        {/* <h1>React Router Tutorial</h1> */}
-        {/* <ul role="nav"> */}
-        {/*   <li><Link to="/">Home</Link></li> */}
-        {/*   <li><Link to="/about">About</Link></li> */}
-        {/* </ul> */}
-        {this.props.children}
-      </div>
-    )
-  }
-})
 
 const About = () => (
   <div>
@@ -48,10 +33,8 @@ const NoMatch = ({ location }) => (
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={App}>
-        <IndexRoute component={UserInfoContainer}/>
-        <Route path="/about" component={About}/>
-        <Route path="/level/:level" component={UserInfoContainer}/>
+      <Route path="/" component={UserInfoContainer}>
+        <Route path="/level/:level" component={KanjiContainer}/>
       </Route>
     </Router>
   </Provider>,
