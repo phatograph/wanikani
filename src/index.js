@@ -6,7 +6,8 @@ import { createStore } from 'redux'
 import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
-import { userInfoReducer, radicalReducer, kanjiReducer, UserInfoContainer } from './containers/UserInfoContainer'
+import { UserInfoContainer } from './containers/UserInfoContainer'
+import { userInfoReducer, radicalReducer, kanjiReducer }  from './reducers'
 
 const store = createStore(combineReducers({
     userInfoReducer,
