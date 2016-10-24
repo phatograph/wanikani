@@ -20,8 +20,8 @@ const Kanji = ({ kanji }) => (
   </div>
 )
 
-const NavLink = ({ index, level, userInfo, onClick }) => (
-  <Link to={`/level/${index}`} onClick={ () => onClick({ level: index, userInfo })}>{index}</Link>
+const NavLink = ({ level, onClick }) => (
+  <Link to={`/level/${level}`} onClick={ () => onClick({ level })}>{level}</Link>
 )
 
 const UserInfo = React.createClass({
@@ -37,7 +37,7 @@ const UserInfo = React.createClass({
       <div>
         <div className={style.nav}>
           { Array.from('x'.repeat(userLevel)).map((x, i) => (
-            <NavLink key={i} index={i + 1} onClick={this.props.onClick} userInfo={this.props.userInfo} level={currentLevel} />
+            <NavLink key={i} level={i + 1} onClick={this.props.onClick} />
           )) }
         </div>
         <div className={style.kanjiList}>
