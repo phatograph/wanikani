@@ -1,6 +1,7 @@
 import React from 'react'
 import Immutable from 'immutable'
 import { connect } from 'react-redux'
+import { toggleEntity } from './../actions'
 
 import style from './../../assets/css/style.css'
 
@@ -35,7 +36,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: ({ entity, currentLevel, text }) => dispatch({ type: `TOGGLE_${text.toUpperCase()}`, entity, currentLevel })
+    onClick: ({ entity, currentLevel, text }) => dispatch(toggleEntity({ entity, currentLevel, text }))
   }
 }
 

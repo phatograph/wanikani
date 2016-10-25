@@ -62,3 +62,11 @@ export const fetchVocabSuccess = ({ vocabs, currentLevel }) => {
     currentLevel
   }
 }
+
+export const toggleEntity = ({ entity, currentLevel, text }) => {
+  return {
+    type: `TOGGLE_${text.toUpperCase()}`,
+    entity,
+    currentLevel
+  }
+}
