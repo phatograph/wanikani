@@ -2,17 +2,19 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory, Link, IndexRoute } from 'react-router'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
 import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
 import { UserInfoContainer } from './containers/UserInfoContainer'
 import * as reducers from './reducers'
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   combineReducers(reducers),
   Immutable.Map(),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeEnhancers(applyMiddleware(thunk))
 )
 
 const About = () => (

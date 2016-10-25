@@ -6,7 +6,8 @@ import {
   fetchUserInfo, fetchUserInfoSuccess,
   fetchRadical, fetchRadicalSuccess,
   fetchKanji, fetchKanjiSuccess,
-  fetchVocab, fetchVocabSuccess
+  fetchVocab, fetchVocabSuccess,
+  fetchEntities
 } from './../actions'
 
 import { Entities } from './../presentationals/Entity'
@@ -58,12 +59,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoad:  ({ currentLevel }) => dispatch(fetchUserInfo({ currentLevel, dispatch })),
-    onClick: ({ currentLevel }) => {
-      dispatch(fetchKanji({ currentLevel, dispatch }))
-      dispatch(fetchRadical({ currentLevel, dispatch }))
-      dispatch(fetchVocab({ currentLevel, dispatch }))
-    }
+    onLoad:  ({ currentLevel }) => dispatch(fetchUserInfo({ currentLevel })),
+    onClick: ({ currentLevel }) => dispatch(fetchEntities({ currentLevel }))
   }
 }
 
