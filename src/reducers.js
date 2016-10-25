@@ -8,6 +8,16 @@ import {
   fetchVocab, fetchVocabSuccess
 } from './actions'
 
+const requestedInformationHandler = (a, b) => {
+  const defaultSrs = { srs_numeric: 0, srs: 'novice' }
+  if (!a.user_specific) a.user_specific = defaultSrs
+  if (!b.user_specific) b.user_specific = defaultSrs
+
+  a.uiActive = b.uiActive = false
+
+  return a.user_specific.srs_numeric - b.user_specific.srs_numeric
+}
+
 export const userInfoReducer = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
@@ -63,14 +73,7 @@ export const radicalReducer = (state = Immutable.Map(), action) => {
 
       return state
     case 'FETCH_RADICAL_SUCCESS':
-      action.radicals.requested_information = action.radicals.requested_information.sort((a, b) => {
-        const defaultSrs = { srs_numeric: 0, srs: 'novice' }
-        if (!a.user_specific) a.user_specific = defaultSrs
-        if (!b.user_specific) b.user_specific = defaultSrs
-
-        return a.user_specific.srs_numeric - b.user_specific.srs_numeric
-      })
-
+      action.radicals.requested_information = action.radicals.requested_information.sort(requestedInformationHandler)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.radicals.requested_information))
     case 'FETCH_RADICAL_CACHE':
     default:
@@ -94,14 +97,7 @@ export const kanjiReducer = (state = Immutable.Map(), action) => {
 
       return state
     case 'FETCH_KANJI_SUCCESS':
-      action.kanjis.requested_information = action.kanjis.requested_information.sort((a, b) => {
-        const defaultSrs = { srs_numeric: 0, srs: 'novice' }
-        if (!a.user_specific) a.user_specific = defaultSrs
-        if (!b.user_specific) b.user_specific = defaultSrs
-
-        return a.user_specific.srs_numeric - b.user_specific.srs_numeric
-      })
-
+      action.kanjis.requested_information = action.kanjis.requested_information.sort(requestedInformationHandler)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.kanjis.requested_information))
     case 'FETCH_KANJI_CACHE':
     default:
@@ -125,16 +121,19 @@ export const vocabReducer = (state = Immutable.Map(), action) => {
 
       return state
     case 'FETCH_VOCAB_SUCCESS':
-      action.vocabs.requested_information = action.vocabs.requested_information.sort((a, b) => {
-        const defaultSrs = { srs_numeric: 0, srs: 'novice' }
-        if (!a.user_specific) a.user_specific = defaultSrs
-        if (!b.user_specific) b.user_specific = defaultSrs
-
-        return a.user_specific.srs_numeric - b.user_specific.srs_numeric
-      })
-
+      action.vocabs.requested_information = action.vocabs.requested_information.sort(requestedInformationHandler)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.vocabs.requested_information))
     case 'FETCH_VOCAB_CACHE':
+    default:
+      return state
+  }
+}
+
+export const entityReducer = (state = Immutable.Map(), action) => {
+  switch (action.type) {
+    case 'TOGGLE_ENTITY':
+      console.log(action.entity)
+      return state
     default:
       return state
   }

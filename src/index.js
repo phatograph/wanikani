@@ -7,14 +7,10 @@ import Immutable from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
 import { UserInfoContainer } from './containers/UserInfoContainer'
-import { userInfoReducer, radicalReducer, kanjiReducer, vocabReducer }  from './reducers'
+import * as reducers from './reducers'
 
-const store = createStore(combineReducers({
-    userInfoReducer,
-    kanjiReducer,
-    radicalReducer,
-    vocabReducer
-  }),
+const store = createStore(
+  combineReducers(reducers),
   Immutable.Map(),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )

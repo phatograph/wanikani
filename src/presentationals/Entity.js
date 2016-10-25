@@ -1,5 +1,6 @@
 import React from 'react'
 import Immutable from 'immutable'
+import { connect } from 'react-redux'
 
 import style from './../../assets/css/style.css'
 
@@ -13,44 +14,35 @@ const Char = ({ entity }) => {
   )
 }
 
-const Entity = React.createClass({
-  componentDidMount() {
-    this.active = false
-    this.currentActive = null
-  },
+const Entity = ({ active, klassName, entity, onClick }) => (
+  <a href className={active ? `${klassName} ${style.entityActive}` : klassName} onClick={(e) => { e.preventDefault(); onClick({ entity: entity.get('character') }) }}>
+    <div className={style.wrapper}>
+      <div className={style.character}><Char entity={ entity } /></div>
+      <div className={style.srsLevel}>
+        Lvl&nbsp;
+        { entity.getIn(['user_specific', 'srs_numeric']) }
+        &nbsp;
+        { entity.getIn(['user_specific', 'srs']) }
+      </div>
+    </div>
+  </a>
+)
 
-  componentDidUpdate() {
-    if (document.querySelectorAll(`.${style.entityActive}`).length > 1) {
-      this.currentActive.click()
-      this.currentActive = null
-    }
-  },
-
-  onClick(e) {
-    e.preventDefault()
-    this.currentActive = document.querySelector(`.${style.entityActive}`)
-    this.active = !this.active
-    this.forceUpdate()
-  },
-
-  render() {
-    const { active, klassName, entity } = this.props
-
-    return (
-      <a href className={this.active ? `${klassName} ${style.entityActive}` : klassName} onClick={this.onClick}>
-        <div className={style.wrapper}>
-          <div className={style.character}><Char entity={ entity } /></div>
-          <div className={style.srsLevel}>
-            Lvl&nbsp;
-            { entity.getIn(['user_specific', 'srs_numeric']) }
-            &nbsp;
-            { entity.getIn(['user_specific', 'srs']) }
-          </div>
-        </div>
-      </a>
-    )
+const mapStateToProps = (state) => {
+  return {
   }
-})
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onClick: ({ entity }) => dispatch({ type: 'TOGGLE_ENTITY', entity })
+  }
+}
+
+const EntityContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Entity)
 
 export const Entities = ({ text, currentLevel, entities, klassName }) => {
   const entitiesA = entities.get(`level${currentLevel}`, Immutable.List()).toArray()
@@ -59,7 +51,7 @@ export const Entities = ({ text, currentLevel, entities, klassName }) => {
     <div>
       <h2>{text} level {currentLevel}</h2>
       <div className={style.kanjiList}>
-        { entitiesA.map((entity, i) => <Entity key={i} klassName={klassName} active={false} entity={entity} /> )}
+        { entitiesA.map((entity, i) => <EntityContainer key={i} klassName={klassName} active={false} entity={entity} /> )}
       </div>
     </div>
   )
