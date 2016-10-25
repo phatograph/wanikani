@@ -18,6 +18,17 @@ const requestedInformationHandler = (a, b) => {
   return a.user_specific.srs_numeric - b.user_specific.srs_numeric
 }
 
+const toggleEntity = (state, action) => {
+  const entityIndex = state.getIn([`level${action.currentLevel}`]).findIndex(x => x.get('character') == action.entity)
+  const initialValue = state.getIn([`level${action.currentLevel}`, entityIndex, 'uiActive'])
+
+  // Set all `uiActive` to false.
+  state = state.set(`level${action.currentLevel}`, state.getIn([`level${action.currentLevel}`]).map(x => x.set('uiActive', false)))
+
+  // Toogle only clicked entity.
+  return state.updateIn([`level${action.currentLevel}`, entityIndex], x => x.set('uiActive', !initialValue))
+}
+
 export const userInfoReducer = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_USER_INFO':
@@ -75,6 +86,8 @@ export const radicalReducer = (state = Immutable.Map(), action) => {
     case 'FETCH_RADICAL_SUCCESS':
       action.radicals.requested_information = action.radicals.requested_information.sort(requestedInformationHandler)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.radicals.requested_information))
+    case 'TOGGLE_RADICALS':
+      return toggleEntity(state, action)
     case 'FETCH_RADICAL_CACHE':
     default:
       return state
@@ -99,6 +112,8 @@ export const kanjiReducer = (state = Immutable.Map(), action) => {
     case 'FETCH_KANJI_SUCCESS':
       action.kanjis.requested_information = action.kanjis.requested_information.sort(requestedInformationHandler)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.kanjis.requested_information))
+    case 'TOGGLE_KANJIS':
+      return toggleEntity(state, action)
     case 'FETCH_KANJI_CACHE':
     default:
       return state
@@ -123,17 +138,9 @@ export const vocabReducer = (state = Immutable.Map(), action) => {
     case 'FETCH_VOCAB_SUCCESS':
       action.vocabs.requested_information = action.vocabs.requested_information.sort(requestedInformationHandler)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.vocabs.requested_information))
+    case 'TOGGLE_VOCABULARIES':
+      return toggleEntity(state, action)
     case 'FETCH_VOCAB_CACHE':
-    default:
-      return state
-  }
-}
-
-export const entityReducer = (state = Immutable.Map(), action) => {
-  switch (action.type) {
-    case 'TOGGLE_ENTITY':
-      console.log(action.entity)
-      return state
     default:
       return state
   }

@@ -14,8 +14,8 @@ const Char = ({ entity }) => {
   )
 }
 
-const Entity = ({ active, klassName, entity, onClick }) => (
-  <a href className={active ? `${klassName} ${style.entityActive}` : klassName} onClick={(e) => { e.preventDefault(); onClick({ entity: entity.get('character') }) }}>
+const Entity = ({ text, klassName, entity, currentLevel, onClick }) => (
+  <a href className={entity.get('uiActive') ? `${klassName} ${style.entityActive}` : klassName} onClick={(e) => { e.preventDefault(); onClick({ entity: entity.get('character'), currentLevel, text }) }}>
     <div className={style.wrapper}>
       <div className={style.character}><Char entity={ entity } /></div>
       <div className={style.srsLevel}>
@@ -35,7 +35,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onClick: ({ entity }) => dispatch({ type: 'TOGGLE_ENTITY', entity })
+    onClick: ({ entity, currentLevel, text }) => dispatch({ type: `TOGGLE_${text.toUpperCase()}`, entity, currentLevel })
   }
 }
 
@@ -51,7 +51,7 @@ export const Entities = ({ text, currentLevel, entities, klassName }) => {
     <div>
       <h2>{text} level {currentLevel}</h2>
       <div className={style.kanjiList}>
-        { entitiesA.map((entity, i) => <EntityContainer key={i} klassName={klassName} active={false} entity={entity} /> )}
+        { entitiesA.map((entity, i) => <EntityContainer key={i} text={text} klassName={klassName} entity={entity} currentLevel={currentLevel} /> )}
       </div>
     </div>
   )
