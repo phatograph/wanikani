@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import jump from 'jump.js'
 
 import {
   fetchUserInfo, fetchUserInfoSuccess,
@@ -30,6 +31,12 @@ const UserInfo = React.createClass({
   componentDidMount() {
     this.props.onLoad({ currentLevel: this.props.params.level })
   },
+  onClick({ target }) {
+    return (e) => {
+      e.preventDefault()
+      jump(target, { offset: -140, duration: 200 })
+    }
+  },
   render() {
     const userLevel = this.props.userInfo.get('level')
 
@@ -40,7 +47,12 @@ const UserInfo = React.createClass({
           <div className={style.navLinks}>
             { Array.from('x'.repeat(userLevel)).map((x, i) => (
               <NavLink key={i} index={i + 1} onClick={this.props.onClick} userLevel={userLevel} />
-              )) }
+            )) }
+          </div>
+          <div className={style.navScrolls}>
+            <a href onClick={this.onClick({ target: '.handleRadicals' })}>Radicals</a>
+            <a href onClick={this.onClick({ target: '.handleKanjis' })}>Kanjis</a>
+            <a href onClick={this.onClick({ target: '.handleVocabularies' })}>Vocabularies</a>
           </div>
         </div>
         <div className={style.entityWrapper}>
