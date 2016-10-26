@@ -83,9 +83,9 @@ export const Entities = ({ text, currentLevel, entities, klassName }) => {
   const entitiesA = entities.get(`level${currentLevel}`, Immutable.List()).toArray()
 
   return (
-    <div>
+    <div className={`handle${text}`}>
       <h2>{text} level {currentLevel}</h2>
-      <div className={style.kanjiList}>
+      <div className={style.entityList}>
         { entitiesA.map((entity, i) => <EntityContainer key={i} text={text} klassName={klassName} entity={entity} currentLevel={currentLevel} /> )}
       </div>
     </div>

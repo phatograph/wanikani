@@ -36,13 +36,18 @@ const UserInfo = React.createClass({
     return (
       <div>
         <div className={style.nav}>
-          { Array.from('x'.repeat(userLevel)).map((x, i) => (
-            <NavLink key={i} index={i + 1} onClick={this.props.onClick} userLevel={userLevel} />
-          )) }
+          <div className={style.levels}>Levels</div>
+          <div className={style.navLinks}>
+            { Array.from('x'.repeat(userLevel)).map((x, i) => (
+              <NavLink key={i} index={i + 1} onClick={this.props.onClick} userLevel={userLevel} />
+              )) }
+          </div>
         </div>
-        <Entities entities={this.props.radicals} text="Radicals"     klassName={style.radical} currentLevel={this.props.params.level || userLevel} />
-        <Entities entities={this.props.kanjis}   text="Kanjis"       klassName={style.kanji}   currentLevel={this.props.params.level || userLevel} />
-        <Entities entities={this.props.vocabs}   text="Vocabularies" klassName={style.vocab}   currentLevel={this.props.params.level || userLevel} />
+        <div className={style.entityWrapper}>
+          <Entities entities={this.props.radicals} text="Radicals"     klassName={style.radical} currentLevel={this.props.params.level || userLevel} />
+          <Entities entities={this.props.kanjis}   text="Kanjis"       klassName={style.kanji}   currentLevel={this.props.params.level || userLevel} />
+          <Entities entities={this.props.vocabs}   text="Vocabularies" klassName={style.vocab}   currentLevel={this.props.params.level || userLevel} />
+        </div>
       </div>
     )
   }
