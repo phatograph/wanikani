@@ -16,7 +16,7 @@ const Char = ({ entity }) => {
 }
 
 const Entity = ({ text, klassName, entity, currentLevel, onClick }) => (
-  <a href className={entity.get('uiActive') ? `${klassName} ${style.entityActive}` : klassName} onClick={(e) => { e.preventDefault(); onClick({ entity: entity.get('character'), currentLevel, text }) }}>
+  <a href className={entity.get('uiActive') ? `${klassName} ${style.entityActive}` : `${klassName} ${style[entity.getIn(['user_specific', 'srs'])]}`} onClick={(e) => { e.preventDefault(); onClick({ entity: entity.get('character'), currentLevel, text }) }}>
     <div className={style.wrapper}>
       <div className={style.character}><Char entity={ entity } /></div>
       <div className={style.srsLevel}>

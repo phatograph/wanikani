@@ -56,6 +56,21 @@ h2 {
   order: 0;
 }
 
+.novice {
+  opacity: 0.3;
+}
+
+.apprentice {
+  opacity: 0.7;
+}
+
+.guru {
+}
+
+.master {
+  box-shadow: inset 10px 0px 0px 0px #000;
+}
+
 .kanji {
   composes: entity;
   background-color: #f100a1;
