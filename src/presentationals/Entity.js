@@ -2,6 +2,7 @@ import React from 'react'
 import Immutable from 'immutable'
 import { connect } from 'react-redux'
 import { toggleEntity } from './../actions'
+import moment from 'moment'
 
 import style from './../../assets/css/style.css'
 
@@ -18,31 +19,33 @@ const Char = ({ entity }) => {
 }
 
 const Details = ({ us }) => (
-  <table>
-    <tbody>
-      <tr>
-        <td>Next available</td><td>{ (new Date(us.available_date)).toString() }</td>
-      </tr>
-      <tr>
-        <td>Meaning correct</td><td>{ us.meaning_correct } / { us.meaning_correct + us.meaning_incorrect } ({ ~~(+us.meaning_correct / (+us.meaning_correct + +us.meaning_incorrect) * 100) } %)</td>
-      </tr>
-      <tr>
-        <td>Meaning current steak (max)</td><td>{ us.meaning_current_streak } ({ us.meaning_max_streak })</td>
-      </tr>
-      { us.reading_correct ? (
+  <div className={style.details}>
+    <table>
+      <tbody>
         <tr>
-          <td>Reading correct</td><td>{ us.reading_correct } / { us.reading_correct + us.reading_incorrect } ({ ~~(+us.reading_correct / (+us.reading_correct + +us.reading_incorrect) * 100)  } %)</td>
+          <td>Next available</td><td><time title={(new Date(us.available_date * 1000)).toString()}>{ moment(us.available_date * 1000).fromNow() }</time></td>
         </tr>
-        ) : null
-      }
-      { us.reading_correct ? (
         <tr>
-          <td>Reading current steak (max)</td><td>{ us.reading_current_streak } ({ us.reading_max_streak })</td>
+          <td>Meaning correct</td><td>{ us.meaning_correct } / { us.meaning_correct + us.meaning_incorrect } ({ ~~(+us.meaning_correct / (+us.meaning_correct + +us.meaning_incorrect) * 100) } %)</td>
         </tr>
-        ) : null
-      }
-    </tbody>
-  </table>
+        <tr>
+          <td>Meaning steak (max)</td><td>{ us.meaning_current_streak } ({ us.meaning_max_streak })</td>
+        </tr>
+        { us.reading_correct ? (
+          <tr>
+            <td>Reading correct</td><td>{ us.reading_correct } / { us.reading_correct + us.reading_incorrect } ({ ~~(+us.reading_correct / (+us.reading_correct + +us.reading_incorrect) * 100)  } %)</td>
+          </tr>
+          ) : null
+        }
+        { us.reading_correct ? (
+          <tr>
+            <td>Reading steak (max)</td><td>{ us.reading_current_streak } ({ us.reading_max_streak })</td>
+          </tr>
+          ) : null
+        }
+      </tbody>
+    </table>
+  </div>
 )
 
 const Entity = ({ text, klassName, entity, currentLevel, onClick }) => (

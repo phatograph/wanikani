@@ -26,35 +26,44 @@ h2 {
   margin: 5px;
   text-align: center;
   color: #fff;
-  min-height: 1px;
-  transition: min-height 0.4s;
-  order: 0;
+  font-size: 30px;
+  /* min-height: 1px; */
+  /* transition: min-height 4s; */
+  /* order: 0; */
 }
 
 .entityActive {
   width: calc(100% - 10px);
-  min-height: 200px;
+  /* min-height: 200px; */
   display: flex;
   justify-content: center;
   align-items: center;
-  order: 1;
+  /* order: 1; */
+
+  .character {
+    font-size: 50px;
+  }
+
+  .srsLevel {
+    font-size: 20px;
+  }
 }
 
-.entityActive ~ .entity {
-  order: 1;
-}
-
-.entityActive:nth-child(3n - 1) + .entity {
-  order: 0;
-}
-
-.entityActive:nth-child(3n - 1) + .entity + .entity {
-  order: 0;
-}
-
-.entityActive:nth-child(3n) + .entity {
-  order: 0;
-}
+/* .entityActive ~ .entity { */
+/*   order: 1; */
+/* } */
+/*  */
+/* .entityActive:nth-child(3n - 1) + .entity { */
+/*   order: 0; */
+/* } */
+/*  */
+/* .entityActive:nth-child(3n - 1) + .entity + .entity { */
+/*   order: 0; */
+/* } */
+/*  */
+/* .entityActive:nth-child(3n) + .entity { */
+/*   order: 0; */
+/* } */
 
 .novice {
   opacity: 0.3;
@@ -83,6 +92,7 @@ h2 {
 
 .vocab {
   composes: entity;
+  font-size: 18px;
   background-color: #a100f1;
 }
 
@@ -91,7 +101,6 @@ h2 {
 }
 
 .character {
-  font-size: 30px;
   margin-bottom: 3px;
   text-align: center;
   display: inline-block;
@@ -129,4 +138,25 @@ h2 {
 .navLinkActive {
   composes: navLink;
   background-color: #ff7777;
+}
+
+.details {
+  padding-bottom: 10px;
+
+  table {
+    margin: 20px auto 0;
+    font-size: 15px;
+    color: #fff;
+
+    td {
+      padding-left: 20px;
+      padding-bottom: 5px;
+      width: 50%;
+
+      &:first-child {
+        padding-left: 0;
+        text-align: right;
+      }
+    }
+  }
 }
