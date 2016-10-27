@@ -8,14 +8,33 @@ import {
   fetchVocab, fetchVocabSuccess
 } from './actions'
 
-const requestedInformationHandler = (a, b) => {
-  const defaultSrs = { srs_numeric: 0, srs: 'novice' }
-  if (!a.user_specific) a.user_specific = defaultSrs
-  if (!b.user_specific) b.user_specific = defaultSrs
+const requestedInformationHandler = (info) => {
+  info = info.sort((a, b) => {
+    const defaultSrs = { srs_numeric: 0, srs: 'novice', meaning_correct: 0, meaning_incorrect: 0 }
+    if (!a.user_specific) a.user_specific = defaultSrs
+    if (!b.user_specific) b.user_specific = defaultSrs
 
-  a.uiActive = b.uiActive = false
+    a.uiActive = b.uiActive = false
 
-  return a.user_specific.srs_numeric - b.user_specific.srs_numeric
+    const diff = a.user_specific.srs_numeric - b.user_specific.srs_numeric
+
+    if (diff > 0) return 1
+    else if (diff < 0) return -1
+
+    const pMeaningA = ~~(+a.user_specific.meaning_correct / (+a.user_specific.meaning_correct + +a.user_specific.meaning_incorrect) * 100)
+    const pMeaningB = ~~(+b.user_specific.meaning_correct / (+b.user_specific.meaning_correct + +b.user_specific.meaning_incorrect) * 100)
+
+    if (!a.user_specific.reading_correct) {
+      return pMeaningA - pMeaningB
+    }
+
+    const pOverallA = ~~((a.user_specific.meaning_correct + a.user_specific.reading_correct) / (a.user_specific.meaning_correct + a.user_specific.meaning_incorrect + a.user_specific.reading_correct + a.user_specific.reading_incorrect) * 100)
+    const pOverallB = ~~((b.user_specific.meaning_correct + b.user_specific.reading_correct) / (b.user_specific.meaning_correct + b.user_specific.meaning_incorrect + b.user_specific.reading_correct + b.user_specific.reading_incorrect) * 100)
+
+    return pOverallA - pOverallB
+  })
+
+  return info
 }
 
 const toggleEntity = (state, action) => {
@@ -41,7 +60,7 @@ export const userInfoReducer = (state = Immutable.Map(), action) => {
 export const radicalReducer = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_RADICAL_SUCCESS':
-      action.radicals.requested_information = action.radicals.requested_information.sort(requestedInformationHandler)
+      action.radicals.requested_information = requestedInformationHandler(action.radicals.requested_information)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.radicals.requested_information))
     case 'TOGGLE_RADICALS':
       return toggleEntity(state, action)
@@ -53,7 +72,7 @@ export const radicalReducer = (state = Immutable.Map(), action) => {
 export const kanjiReducer = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_KANJI_SUCCESS':
-      action.kanjis.requested_information = action.kanjis.requested_information.sort(requestedInformationHandler)
+      action.kanjis.requested_information = requestedInformationHandler(action.kanjis.requested_information)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.kanjis.requested_information))
     case 'TOGGLE_KANJIS':
       return toggleEntity(state, action)
@@ -65,7 +84,7 @@ export const kanjiReducer = (state = Immutable.Map(), action) => {
 export const vocabReducer = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case 'FETCH_VOCAB_SUCCESS':
-      action.vocabs.requested_information = action.vocabs.requested_information.sort(requestedInformationHandler)
+      action.vocabs.requested_information = requestedInformationHandler(action.vocabs.requested_information)
       return state.set(`level${action.currentLevel}`, Immutable.fromJS(action.vocabs.requested_information))
     case 'TOGGLE_VOCABULARIES':
       return toggleEntity(state, action)

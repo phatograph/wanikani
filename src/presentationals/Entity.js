@@ -25,6 +25,12 @@ const Details = ({ us }) => (
         <tr>
           <td>Next available</td><td><time title={(new Date(us.available_date * 1000)).toString()}>{ moment(us.available_date * 1000).fromNow() }</time></td>
         </tr>
+        { us.reading_correct ? (
+          <tr>
+            <td>Total correct</td><td>{ us.meaning_correct + us.reading_correct } / { us.meaning_correct + us.meaning_incorrect + us.reading_correct + us.reading_incorrect } ({ ~~((us.meaning_correct + us.reading_correct) / (us.meaning_correct + us.meaning_incorrect + us.reading_correct + us.reading_incorrect) * 100) } %)</td>
+          </tr>
+          ) : null
+        }
         <tr>
           <td>Meaning correct</td><td>{ us.meaning_correct } / { us.meaning_correct + us.meaning_incorrect } ({ ~~(+us.meaning_correct / (+us.meaning_correct + +us.meaning_incorrect) * 100) } %)</td>
         </tr>
