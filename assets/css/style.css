@@ -87,11 +87,12 @@ h2 {
 
 .entityActive {
   width: calc(100% - 10px);
-  /* min-height: 200px; */
-  display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 10px;
+  display: flex;
   /* order: 1; */
+  /* min-height: 200px; */
 
   .character {
     font-size: 50px;
@@ -177,8 +178,6 @@ h2 {
 }
 
 .details {
-  padding-bottom: 10px;
-
   table {
     margin: 20px auto 0;
     font-size: 15px;

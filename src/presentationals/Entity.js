@@ -64,7 +64,7 @@ const Entity = ({ text, klassName, entity, currentLevel, onClick }) => (
         &nbsp;
         { entity.getIn(['user_specific', 'srs']) }
       </div>
-      { entity.get('uiActive') ? <Details us={entity.get('user_specific').toJS()} /> : null }
+      { entity.get('uiActive') && entity.getIn(['user_specific', 'srs_numeric']) > 0 ? <Details us={entity.get('user_specific').toJS()} /> : null }
     </div>
   </a>
 )
