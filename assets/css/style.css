@@ -80,6 +80,7 @@ h2 {
   text-align: center;
   color: #fff;
   font-size: 30px;
+  cursor: pointer;
   /* min-height: 1px; */
   /* transition: min-height 4s; */
   /* order: 0; */
@@ -118,6 +119,17 @@ h2 {
 /* .entityActive:nth-child(3n) + .entity { */
 /*   order: 0; */
 /* } */
+
+.entityLink {
+  color: #fff;
+  font-size: 11px;
+  display: inline-block;
+  margin-top: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
 
 .novice {
   opacity: 0.3;
@@ -179,7 +191,7 @@ h2 {
 
 .details {
   table {
-    margin: 20px auto 0;
+    margin: 15px auto 0;
     font-size: 15px;
     color: #fff;
 

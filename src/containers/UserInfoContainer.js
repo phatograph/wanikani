@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import jump from 'jump.js'
+import { browserHistory  } from 'react-router'
 
 import {
   fetchUserInfo, fetchUserInfoSuccess,
@@ -28,7 +29,14 @@ const NavLink = ({ index, userLevel, onClick }) => (
 )
 
 const UserInfo = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.object
+  },
   componentDidMount() {
+    // if (!localStorage.getItem('api_key')) {
+    //   this.context.router.push('/login')
+    // }
+    //
     this.props.onLoad({ currentLevel: this.props.params.level })
   },
   onClick({ target }) {
@@ -56,9 +64,9 @@ const UserInfo = React.createClass({
           </div>
         </div>
         <div className={style.entityWrapper}>
-          <Entities entities={this.props.radicals} text="Radicals"     klassName={style.radical} currentLevel={this.props.params.level || userLevel} />
-          <Entities entities={this.props.kanjis}   text="Kanjis"       klassName={style.kanji}   currentLevel={this.props.params.level || userLevel} />
-          <Entities entities={this.props.vocabs}   text="Vocabularies" klassName={style.vocab}   currentLevel={this.props.params.level || userLevel} />
+          <Entities entities={this.props.radicals} wLink="radicals"   text="Radicals"     klassName={style.radical} currentLevel={this.props.params.level || userLevel} />
+          <Entities entities={this.props.kanjis}   wLink="kanji"      text="Kanjis"       klassName={style.kanji}   currentLevel={this.props.params.level || userLevel} />
+          <Entities entities={this.props.vocabs}   wLink="vocabulary" text="Vocabularies" klassName={style.vocab}   currentLevel={this.props.params.level || userLevel} />
         </div>
       </div>
     )

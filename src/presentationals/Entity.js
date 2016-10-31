@@ -54,8 +54,8 @@ const Details = ({ us }) => (
   </div>
 )
 
-const Entity = ({ text, klassName, entity, currentLevel, onClick }) => (
-  <a href className={entity.get('uiActive') ? `${klassName} ${style.entityActive}` : `${klassName} ${style[entity.getIn(['user_specific', 'srs'])]}`} onClick={(e) => { e.preventDefault(); onClick({ entity: entity.get('character'), currentLevel, text }) }}>
+const Entity = ({ wLink, text, klassName, entity, currentLevel, onClick }) => (
+  <div href className={entity.get('uiActive') ? `${klassName} ${style.entityActive}` : `${klassName} ${style[entity.getIn(['user_specific', 'srs'])]}`} onClick={(e) => { e.preventDefault(); onClick({ entity: entity.get('character'), currentLevel, text }) }}>
     <div className={style.wrapper}>
       <div className={style.character}><Char entity={ entity } /></div>
       <div className={style.srsLevel}>
@@ -64,9 +64,10 @@ const Entity = ({ text, klassName, entity, currentLevel, onClick }) => (
         &nbsp;
         { entity.getIn(['user_specific', 'srs']) }
       </div>
+      { entity.get('uiActive') ? <a className={style.entityLink} target="_blank" onClick={ (e) => e.stopPropagation() } href={`https://www.wanikani.com/${wLink}/${ wLink == 'radicals' ? entity.get('meaning') : entity.get('character') }`}>details</a> : null }
       { entity.get('uiActive') && entity.getIn(['user_specific', 'srs_numeric']) > 0 ? <Details us={entity.get('user_specific').toJS()} /> : null }
     </div>
-  </a>
+  </div>
 )
 
 const mapStateToProps = (state) => {
@@ -85,14 +86,14 @@ const EntityContainer = connect(
   mapDispatchToProps
 )(Entity)
 
-export const Entities = ({ text, currentLevel, entities, klassName }) => {
+export const Entities = ({ wLink, text, currentLevel, entities, klassName }) => {
   const entitiesA = entities.get(`level${currentLevel}`, Immutable.List()).toArray()
 
   return (
     <div className={`handle${text}`}>
       <h2>{text} level {currentLevel}</h2>
       <div className={style.entityList}>
-        { entitiesA.map((entity, i) => <EntityContainer key={i} text={text} klassName={klassName} entity={entity} currentLevel={currentLevel} /> )}
+        { entitiesA.map((entity, i) => <EntityContainer key={i} wLink={wLink} text={text} klassName={klassName} entity={entity} currentLevel={currentLevel} /> )}
       </div>
     </div>
   )

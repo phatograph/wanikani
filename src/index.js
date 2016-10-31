@@ -23,7 +23,6 @@ const About = () => (
   </div>
 )
 
-// TODO: Implement this
 const NoMatch = ({ location }) => (
   <div>
     <h2>Whoops</h2>
@@ -36,6 +35,7 @@ ReactDOM.render(
     <Router history={browserHistory}>
       <Route path="/" component={UserInfoContainer} />
       <Route path="/level/:level" component={UserInfoContainer} />
+      <Route path="*" component={NoMatch}/>
     </Router>
   </Provider>,
   document.querySelector('#app')
