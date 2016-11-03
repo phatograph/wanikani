@@ -4,8 +4,10 @@
   "description": "wanikani",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "dev": "webpack-dev-server --inline",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "webpack"
   },
   "author": "Pat Wangrungarun",
   "license": "ISC",
