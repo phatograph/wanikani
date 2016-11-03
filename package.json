@@ -12,6 +12,8 @@
   "author": "Pat Wangrungarun",
   "license": "ISC",
   "devDependencies": {
+  },
+  "dependencies": {
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
     "babel-loader": "^6.2.5",
@@ -20,21 +22,16 @@
     "css-loader": "^0.25.0",
     "eslint": "^3.8.1",
     "eslint-loader": "^1.6.0",
-    "node-sass": "^3.10.1",
-    "postcss": "^5.2.5",
-    "postcss-css-reset": "^1.0.2",
-    "postcss-loader": "^1.0.0",
-    "sass-loader": "^4.0.2",
-    "style-loader": "^0.13.1",
-    "webpack-dev-server": "^1.16.2"
-  },
-  "dependencies": {
     "express": "^4.14.0",
     "fetch-jsonp": "^1.0.2",
     "history": "^4.3.0",
     "immutable": "^3.8.1",
     "jump.js": "^1.0.1",
     "moment": "^2.15.2",
+    "node-sass": "^3.10.1",
+    "postcss": "^5.2.5",
+    "postcss-css-reset": "^1.0.2",
+    "postcss-loader": "^1.0.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
@@ -42,6 +39,9 @@
     "redux": "^3.6.0",
     "redux-immutable": "^3.0.8",
     "redux-thunk": "^2.1.0",
-    "webpack": "^1.13.2"
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2"
   }
 }
