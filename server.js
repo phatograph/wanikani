@@ -1,7 +1,7 @@
 var express     = require('express');
 var path        = require('path');
 var app         = express();
-var static_path = path.join(__dirname, 'build');
+var static_path = path.join(__dirname, 'public');
 var port        = 4000;
 
 app.use(express.static(static_path));
